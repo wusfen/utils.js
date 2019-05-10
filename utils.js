@@ -18,22 +18,21 @@ var utils = {
       if(value && (value.constructor==Object || value instanceof Array)){
         for(var k in value){
           if (!value.hasOwnProperty(k)) continue
-          var subKey = !key? k: '[' + k + ']'
+          var subKey = !key? k: '[' + k + ']' // obj[k]
           loopValue(key + subKey, value[k])
         }
       } else {
         if(value === undefined || value === null) value = ''
         if(typeof value ==='function') value = value()
-        key = encodeURIComponent(key.replace(/\[\d+?\]$/g, '[]'))
+        key = key.replace(/\[\d+?\]$/g, '[]') // obj[arr][0] => arr[]
+        key = encodeURIComponent(key)
         value = encodeURIComponent(value)
-        params += '&' + key + '=' + value
+        params += (params?'&':'') + key + '=' + value // &obj[k][s]=value
       }
     }
     loopValue('', value)
 
-    return params
-      .replace(/%20/g, '+')
-      .replace(/^&/, '')
+    return params.replace(/%20/g, '+') // ' ' => '+'
   }
 }
 
