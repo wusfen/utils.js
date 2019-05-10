@@ -24,7 +24,7 @@ var utils = {
       } else {
         if(value === undefined || value === null) value = ''
         if(typeof value ==='function') value = value()
-        key = key.replace(/\[\d+?\]$/g, '[]') // obj[arr][0] => arr[]
+        key = key.replace(/\[\d+?\]$/g, '[]') // obj[arr][0] => obj[arr][]
         key = encodeURIComponent(key)
         value = encodeURIComponent(value)
         params += (params?'&':'') + key + '=' + value // &obj[k][s]=value
