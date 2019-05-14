@@ -33,6 +33,27 @@ var utils = {
     loopValue('', value)
 
     return params.replace(/%20/g, '+') // ' ' => '+'
+  },
+  reg: function (name, string, flags) {
+    if (!string) {
+      return reg[name]
+    }
+    string = string.source || string
+
+    for (var k in reg) {
+      if (!reg.hasOwnProperty(k)) continue
+      var n = RegExp('{' + k.replace(/[.(){}[\]]/g, '\\$&') + '}', 'g')
+      var s = reg[k].source
+      var v = s.match(/\|/) ? '(?:' + s + ')' : s
+      string = string.replace(n, v)
+    }
+
+    var r = RegExp(string, flags)
+    if (name !== null) {
+      reg[name] = r
+    }
+    
+    return r
   }
 }
 
