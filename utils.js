@@ -34,6 +34,9 @@ var utils = {
 
     return params.replace(/%20/g, '+') // ' ' => '+'
   },
+  getUrlParam: function (name) {
+    return location.href.match(RegExp('[?&]' + name+ '=([^&]+)|$'))[1]
+  },
   reg: function (name, string, flags) {
     if (!string) {
       return reg[name]
