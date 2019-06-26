@@ -1,11 +1,12 @@
 var utils = {
-  clone: function(obj, deep){
+  clone: function clone(obj, deep){
+    if(deep === true) deep = 10
     var _obj = obj
     if(obj && (obj.constructor == Object || obj instanceof Array)){
       var _obj = obj instanceof Array? []: {}
       for(var key in obj){
         if(obj.hasOwnProperty(key)){
-          _obj[key] = deep? clone(obj[key]): obj[key]
+          _obj[key] = --deep? clone(obj[key], deep): obj[key]
         }
       }
     }
@@ -57,7 +58,36 @@ var utils = {
     }
     
     return r
-  }
+  },
+  /**
+   * 补间函数
+   * start{Nubmer}: 开始值
+   * end{Number}: 结束值
+   * callback(value): 过程回调
+   *   value{Number}: 补间过程 start 到 end 间当前的值
+   * return{Object}
+   *   update(callback): 链式设置 callback
+   */
+  tween (start, end, callback) {
+    let timeout = 250
+    let timeGap = 16
+    let times = timeout / timeGap
+    let diff = end - start
+    let step = diff / times
+    let timer = setInterval(() => {
+      start += step
+      if ((step >= 0 && start >= end) || (step <= 0 && start <= end)) {
+        start = end
+        clearInterval(timer)
+      }
+      callback(start)
+    }, timeGap)
+    return {
+      update (fn) {
+        callback = fn
+      }
+    }
+  },
 }
 
 module.exports = utils
